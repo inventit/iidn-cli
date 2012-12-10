@@ -1,0 +1,42 @@
+#!/bin/sh
+
+#
+# Copyright 2012 Inventit Inc. 
+#
+
+resolveRuntime() {
+	# Check node
+	if command -v node > /dev/null; then
+		echo '[IIDN] ** Using node... **'
+		script=nodejs
+		return
+	else
+		echo '[IIDN] Node.js is missing. Set PATH to node.'
+	fi
+
+	# Check java
+	if command -v $JAVA_HOME/bin/java > /dev/null || command -v java > /dev/null; then
+		echo '[IIDN] ** Using java (6+)... **'
+		script=rhino
+		return
+	else
+		echo '[IIDN] Java(6+) is missing. Set JAVA_HOME or PATH to java.'
+	fi
+}
+
+
+# main entry point
+
+basedir=$(dirname $0)
+
+resolveRuntime
+script=$basedir/$script
+
+if [ "$script" == "$basedir/" ]; then
+	echo '[IIDN] No appropriate runtime. Bye.'
+	exit 1
+fi
+
+chmod 755 $script/iidn
+# triggers the runtime specific script
+$script/iidn $*
