@@ -3,7 +3,7 @@
  */
 
 var IIDN_TERM_OF_SERVICE_URI = 'http://dev.yourinventit.com/files/TERMS.txt';
-var MOAT_REST_API_URI = 'http://localhost:7120/moat/v1';
+var MOAT_REST_API_URI = 'https://sandbox.service-sync.com/moat/v1';
 var SIGNUP_TIMEOUT_MS = 5 * 60 * 1000;
 
 function main(argvInput) {
