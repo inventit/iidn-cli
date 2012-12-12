@@ -38,7 +38,7 @@
 
 	function writeRawContent(path, content) {
 		var fs = require('fs');
-		fs.writeFileSync(path, content, 'binary');
+		fs.writeFileSync(path, content);
 	}
 
 	function prompt(callback) {
@@ -102,7 +102,10 @@
 		}
 		o.buff = '';
 		var req = http.request(options, function(res) {
-			res.setEncoding('utf8');
+			var contentType = res.headers['content-type'];
+			if (contentType && contentType.indexOf('octet-stream') < 0) {
+				res.setEncoding('UTF-8');
+			} 
 			res.on('data', function(chunk) {
 				var skipCallback = false;
 				var content = chunk;
@@ -136,7 +139,6 @@
 					}
 				}
 				if (!skipCallback && o.callback) {
-					var contentType = res.headers['content-type'];
 					if (contentType && contentType.indexOf('json') >= 0) {
 						o.callback(JSON.parse(content), res.statusCode);
 					} else {
