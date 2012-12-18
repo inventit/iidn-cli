@@ -514,7 +514,7 @@ function signupCommand() {
 			log('  app_id :' + info.appId);
 			log('  client_id :' + info.clientId);
 			log('  client_secret :' + info.clientSecret);
-			log('<NOTICE!> The information is used in order for your application to access Inventit Service-Sync Server.');
+			log('<NOTICE!> The information is used in order for your application to access IIDN Sandbox Cloud.');
 			log('=====================');
 			exit(0);
 		}
