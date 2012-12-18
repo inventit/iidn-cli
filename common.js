@@ -516,12 +516,6 @@ function signupCommand() {
 			log('  client_secret :' + info.clientSecret);
 			log('<NOTICE!> The information is used in order for your application to access Inventit Service-Sync Server.');
 			log('=====================');
-			log('Enrollment Info:');
-			log('  domain_name :' + info.domainName);
-			log('  enrollment_user_id :' + info.enrollmentUserId);
-			log('  enrollment_password :' + info.enrollmentPassword);
-			log('<NOTICE!> The information is used in order for your devices to enroll Inventit Service-Sync Server.');
-			log('=====================');
 			exit(0);
 		}
 	}
