@@ -281,6 +281,7 @@ function deployCommand() {
 
 						} else if (statusCode == 400) {
 							// trying to PUT operation
+							log('400 is returned as the package already exists. Trying to update...');
 							httpPost(url + '&m=put', 'application/zip', readRawContent(argv[1]),
 								function(body, statusCode) {
 									if (statusCode == 200) {
@@ -333,7 +334,7 @@ function deployCommand() {
 function logCommand() {
 	
 	this.perform = function(argv) {
-		withAuth.invoke(MOAT_REST_API_URI + '/sys/log?tail=true',
+		withAuth.invoke(MOAT_REST_API_URI + '/sys/log?t=true',
 			function(url) {
 				log('Tailing the MOAT js server script log:');
 				httpGet(url,
@@ -458,7 +459,7 @@ function signupCommand() {
 	
 	function signup(oauth2Provider) {
 		var signupResult;
-		httpGet(MOAT_REST_API_URI + '/sys/oauth2?provider=' + oauth2Provider + '&type=authorization', onAuthorizationResponse);
+		httpGet(MOAT_REST_API_URI + '/sys/oauth2auth?p=' + oauth2Provider + '&t=authorization', onAuthorizationResponse);
 		function onAuthorizationResponse(body) {
 			if (!body) {
 				log('Server is unreachable or not avaialble for now. Try later.');
@@ -488,7 +489,7 @@ function signupCommand() {
 
 			prompt(function(text) {
 				if (text != '') {
-					var get = MOAT_REST_API_URI + '/sys/oauth2?provider=' + oauth2Provider + '&type=verification&code=' + escape(text);
+					var get = MOAT_REST_API_URI + '/sys/oauth2auth?p=' + oauth2Provider + '&t=verification&c=' + escape(text);
 					httpGet(get,
 						function(body, statusCode) {
 							if (!body) {
