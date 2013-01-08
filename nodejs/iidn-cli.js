@@ -154,7 +154,7 @@
 				res.on('close', o.onClose);
 				res.on('end', o.onClose);
 			}
-			if (res.statusCode != 200) {
+			if (Math.floor(res.statusCode / 100) != 2) {
 				console.error('[ERROR] Status:'+ res.statusCode);
 				if (o.callback) {
 					o.callback(null, res.statusCode);
