@@ -16,6 +16,8 @@ function main(argvInput) {
 		log(' signup .... Allows you to sign up IIDN. Your OAuth2 account is mandatory.');
 		log(' deployjs .... Allows you to deploy your MOAT js script package archive.');
 		log(' undeployjs .... Allows you to undeploy your MOAT js script package archive.');
+		log(' deploybin .... Allows you to deploy your binary distribution package.');
+		log(' undeploybin .... Allows you to undeploy your binary distribution package.');
 		log(' log    .... Allows you to tail the server side MOAT js script logs.');
 		log(' tokengen .... Allows you to download the security token for your client application (i.e. Android, OSGi).');
 		log(' remove .... Allows you to remove your IIDN account.');
@@ -76,6 +78,30 @@ function httpPost(uri, type, body, callback, onCloseOrEnd) {
 		callback: callback,
 		onClose: onCloseOrEnd,
 		chunked: false
+	});
+}
+
+function httpPut(uri, type, body, callback, onCloseOrEnd) {
+	httpMethod({
+		uri: uri,
+		method: 'PUT',
+		type: type,
+		body: body,
+		callback: callback,
+		onClose: onCloseOrEnd,
+		chunked: false
+	});
+}
+
+function httpDelete(uri, callback, onCloseOrEnd, chunked) {
+	httpMethod({
+		uri: uri,
+		method: 'DELETE',
+		type: null,
+		body: null,
+		callback: callback,
+		onClose: onCloseOrEnd,
+		chunked: chunked
 	});
 }
 
@@ -167,6 +193,108 @@ withAuth = (function() {
 	}
 	return this;
 })();
+
+// Undeploy Bin Command
+function undeploybinCommand() {
+
+	this.perform = function(argv) {
+		withAuth.invoke(MOAT_REST_API_URI + '/sys/package/' + argv[1] + '?r=delete',
+			function(url) {
+				log('Undeploying the distribution package...');
+				httpGet(url,
+					function(body, statusCode) {
+						var deleteUrl = body["delete"];
+						if (deleteUrl) {
+							var deleteError = false;
+							httpDelete(deleteUrl, function(body, statusCode) {
+								deleteError = true;
+								if (body != null) {
+									log('Error. Message:' + body + ', Code:' + statusCode);
+								}
+								withAuth.signOut(82);
+							},
+							function() {
+								if (!deleteError) {
+									log('Removed.');
+								}
+								withAuth.signOut(80);
+							});
+						} else {
+							log('Did Nothing');
+							withAuth.signOut(81);
+						}
+					}
+				);
+			}
+		);
+	}
+	
+	this.help = function() {
+		log('iidn undeploybin <object-file-name>');
+	}
+
+	this.validate = function(argv) {
+		if (argv.length != 2) {
+			return false;
+		}
+		return true;
+	}
+	
+}
+
+// Deploy Bin Command
+function deploybinCommand() {
+
+	this.perform = function(argv) {
+		var objectName = argv[1];
+		if (objectName.indexOf('/') >= 0) {
+			objectName = objectName.substring(objectName.lastIndexOf('/') + 1);
+		}
+		log('Registering [' + objectName + ']...');
+		withAuth.invoke(MOAT_REST_API_URI + '/sys/package/' + objectName + '?r=put',
+			function(url) {
+				log('Deploying a binary distribution package...');
+				httpGet(url,
+					function(body, statusCode) {
+						if (statusCode == 200) {
+							var uploadedError = false;
+							httpPut(body['put'], 'application/octet-stream', readRawContent(argv[1]),
+								function(body, statusCode) {
+									uploadedError = true;
+									if (body != null) {
+										log('Error. Message:' + body + ', Code:' + statusCode);
+									}
+									withAuth.signOut(71);
+								},
+								function() {
+									if (!uploadedError) {
+										log('A new binary distribution package has been created.');
+									}
+									withAuth.signOut(70);
+								});
+
+						} else {
+							log('Done');
+							withAuth.signOut(72);
+						}
+					}
+				);
+			}
+		);
+	}
+		
+	this.help = function() {
+		log('iidn deploybin <path/to/binary/package/file>');
+	}
+
+	this.validate = function(argv) {
+		if (argv.length != 2) {
+			return false;
+		}
+		return true;
+	}
+	
+}
 
 // Tokengen Command
 function tokengenCommand() {
