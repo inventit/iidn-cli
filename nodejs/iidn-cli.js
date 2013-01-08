@@ -91,13 +91,17 @@
 		var http = (urlObj.protocol == 'https:') ? require('https') : require('http');
 		var options = {
 			hostname: urlObj.hostname,
-			port: urlObj.port,
 			path: urlObj.path,
 			method: o.method
 		};
+		if (urlObj.port) {
+			options['port'] = urlObj.port;
+		}
+		options.headers = {};
 		if (o.type) {
-			options.headers = {
-				'Content-Type' : o.type
+			options.headers['Content-Type'] = o.type;
+			if (o.type.indexOf('octet-stream') && o.body) {
+				options.headers['Content-Length'] = o.body.length;
 			}
 		}
 		o.buff = '';
