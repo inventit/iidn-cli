@@ -14,8 +14,8 @@ function main(argvInput) {
 		log('iidn <COMMAND> [ARGS]');
 		log('COMMAND:');
 		log(' signup .... Allows you to sign up IIDN. Your OAuth2 account is mandatory.');
-		log(' deploy .... Allows you to deploy your MOAT js script package archive.');
-		log(' undeploy .... Allows you to undeploy your MOAT js script package archive.');
+		log(' deployjs .... Allows you to deploy your MOAT js script package archive.');
+		log(' undeployjs .... Allows you to undeploy your MOAT js script package archive.');
 		log(' log    .... Allows you to tail the server side MOAT js script logs.');
 		log(' tokengen .... Allows you to download the security token for your client application (i.e. Android, OSGi).');
 		log(' remove .... Allows you to remove your IIDN account.');
@@ -231,13 +231,13 @@ function tokengenCommand() {
 	
 }
 
-// Undeploy Command
-function undeployCommand() {
+// Undeploy js Command
+function undeployjsCommand() {
 
 	this.perform = function(argv) {
 		withAuth.invoke(MOAT_REST_API_URI + '/sys/package/' + argv[1] + '?m=delete',
 			function(url) {
-				log('Undeploying the package...');
+				log('Undeploying the MOAT js package...');
 				httpGet(url,
 					function(body, statusCode) {
 						log('Done');
@@ -253,7 +253,7 @@ function undeployCommand() {
 	}
 	
 	this.help = function() {
-		log('iidn undeploy <pacakge-id>');
+		log('iidn undeployjs <pacakge-id>');
 	}
 
 	this.validate = function(argv) {
@@ -265,17 +265,17 @@ function undeployCommand() {
 	
 }
 
-// Deploy Command
-function deployCommand() {
+// Deploy js Command
+function deployjsCommand() {
 
 	this.perform = function(argv) {
 		withAuth.invoke(MOAT_REST_API_URI + '/sys/package',
 			function(url) {
-				log('Deploying a package...');
+				log('Deploying a MOAT js package...');
 				httpPost(url, 'application/zip', readRawContent(argv[1]),
 					function(body, statusCode) {
 						if (statusCode == 200) {
-							log('A new package has been created.');
+							log('A new MOAT js package has been created.');
 							desc(body);
 							withAuth.signOut(40);
 
@@ -304,7 +304,7 @@ function deployCommand() {
 	}
 	
 	function desc(body) {
-		log('Deployed package info:');
+		log('Deployed MOAT js package info:');
 		log(' package-id(name):' + body.packageJson.name);
 		log(' version:' + body.packageJson.version);
 		if (body.udatedFiles) {
@@ -317,8 +317,8 @@ function deployCommand() {
 	}
 	
 	this.help = function() {
-		log('iidn deploy <path/to/package/zip/file>');
-		log('The file should be zip-archived and must contain the package.json.');
+		log('iidn deployjs <path/to/package/zip/file>');
+		log('The file must be zip-archived and contain the package.json.');
 	}
 
 	this.validate = function(argv) {
