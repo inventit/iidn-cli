@@ -49,6 +49,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Change History
 
+0.2.2 : January 9, 2013  
+
+* Fixes an issue where binary download command (sysdownload) generates corrupted content file because of failure of handling chunked binary data
+
 0.2.1 : January 9, 2013  
 
 * Updates the copyright year
