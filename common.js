@@ -250,7 +250,7 @@ function bindeployCommand() {
 		if (objectName.indexOf('/') >= 0) {
 			objectName = objectName.substring(objectName.lastIndexOf('/') + 1);
 		}
-		if (/^[a-zA-Z0-9\.-_%]*$/.test(objectName) == false) {
+		if (/^[a-zA-Z0-9\.\-_%]*$/.test(objectName) == false) {
 			log('Invalid Name => ' + objectName + '. Alphanumeric, period(.), hyphen(-) and underscore(_) are allowed.');
 			withAuth.signOut(73);
 		} else {
