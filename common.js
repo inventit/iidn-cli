@@ -248,8 +248,8 @@ function sysdownloadCommand() {
 				log('Downloading the distribution package...');
 				httpGet(url + '&r=get&u=' + cred[1] + '&accept_eula=yes&eula=' + escape(IIDN_EULA_URI),
 					function(body, statusCode) {
-						var getUrl = body["get"];
-						if (getUrl) {
+						if (statusCode == 200) {
+							var getUrl = body["get"];
 							var getError = false;
 							httpGet(getUrl, function(body, statusCode) {
 								if (statusCode != 200) {
