@@ -3,6 +3,7 @@
  */
 
 var IIDN_TERM_OF_SERVICE_URI = 'http://dev.yourinventit.com/files/TERMS.txt';
+var IIDN_EULA_URI = 'http://dev.yourinventit.com/files/2013JAN-IBCLA.txt';
 var MOAT_REST_API_URI = 'https://sandbox.service-sync.com/moat/v1';
 var SIGNUP_TIMEOUT_MS = 5 * 60 * 1000;
 
@@ -13,14 +14,16 @@ function main(argvInput) {
 	if (command == null) {
 		log('iidn <COMMAND> [ARGS]');
 		log('COMMAND:');
-		log(' signup .... Allows you to sign up IIDN. Your OAuth2 account is mandatory.');
-		log(' jsdeploy .... Allows you to deploy your MOAT js script package archive.');
-		log(' jsundeploy .... Allows you to undeploy your MOAT js script package archive.');
-		log(' bindeploy .... Allows you to deploy your binary distribution package.');
+		log(' signup      .... Allows you to sign up IIDN. Your OAuth2 account is mandatory.');
+		log(' jsdeploy    .... Allows you to deploy your MOAT js script package archive.');
+		log(' jsundeploy  .... Allows you to undeploy your MOAT js script package archive.');
+		log(' bindeploy   .... Allows you to deploy your binary distribution package.');
 		log(' binundeploy .... Allows you to undeploy your binary distribution package.');
-		log(' log    .... Allows you to tail the server side MOAT js script logs.');
-		log(' tokengen .... Allows you to download the security token for your client application (i.e. Android, OSGi).');
-		log(' remove .... Allows you to remove your IIDN account.');
+		log(' bindeploy   .... Allows you to deploy your binary distribution package.');
+		log(' sysdownload .... Allows you to download proprietary binary objects offered by Inventit. EULA must be accepted.');
+		log(' log         .... Allows you to tail the server side MOAT js script logs.');
+		log(' tokengen    .... Allows you to download the security token for your client application (i.e. Android, OSGi).');
+		log(' remove      .... Allows you to remove your IIDN account.');
 		exit(1);
 	} else {
 		if (command.validate(argv)) {
@@ -154,7 +157,7 @@ withAuth = (function() {
 						signIn(cred, function(body, statusCode) {
 							if (body) {
 								authToken = body.accessToken;
-								callback(toAuthUrl(input));
+								callback(toAuthUrl(input), cred);
 							} else {
 								exit(23);
 							}
@@ -193,6 +196,86 @@ withAuth = (function() {
 	}
 	return this;
 })();
+
+// Sys Download Command
+function sysdownloadCommand() {
+	var objectName;
+	
+	this.perform = function(argv) {
+		objectName = argv[1];
+		askEula({
+			rejected: function() {
+				exit(10);
+			},
+			accepted: function() {
+				download();
+			}
+		});
+	}
+	this.help = function() {
+		log('iidn sysdownload <object-file-name>');
+	}
+	this.validate = function(argv) {
+		if (argv.length != 2) {
+			return false;
+		}
+		return true;
+	}
+
+	function askEula(callback) {
+		log('Please read and accept the EULA:');
+		httpGet(IIDN_EULA_URI, function(content, status) {
+			if (status != 200) {
+				log('Error! EULA is not available. Try later.');
+				exit(15);
+			} else {
+				print(content);
+				log('Did you read and accept the agreement? (yes/no):');
+				prompt(function(text) {
+					if (text.toLowerCase() != 'yes') {
+						callback.rejected();
+					} else {
+						callback.accepted();
+					}
+				});
+			}
+		});
+	}
+	
+	function download() {
+		withAuth.invoke(MOAT_REST_API_URI + '/sys/package/' + objectName,
+			function(url, cred) {
+				log('Downloading the distribution package...');
+				httpGet(url + '&r=get&u=' + cred[1] + '&accept_eula=yes&eula=' + escape(IIDN_EULA_URI),
+					function(body, statusCode) {
+						var getUrl = body["get"];
+						if (getUrl) {
+							var getError = false;
+							httpGet(getUrl, function(body, statusCode) {
+								if (statusCode != 200) {
+									getError = true;
+									log('Error. Message:' + body + ', Code:' + statusCode);
+								} else {
+									writeRawContent(objectName, body);
+								}
+							},
+							function() {
+								if (!getError) {
+									log('The package:[' + objectName + '] has been downloaded.');
+								}
+								withAuth.signOut(80);
+							});
+						} else {
+							log('Did Nothing');
+							withAuth.signOut(81);
+						}
+					}
+				);
+			}
+		);
+	}
+	
+}
 
 // Undeploy Bin Command
 function binundeployCommand() {
