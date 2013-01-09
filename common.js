@@ -1,5 +1,5 @@
 /**
- * Copyright 2012 Inventit Inc.
+ * Copyright 2013 Inventit Inc.
  */
 
 var IIDN_TERM_OF_SERVICE_URI = 'http://dev.yourinventit.com/files/TERMS.txt';
