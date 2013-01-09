@@ -49,6 +49,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Change History
 
+0.2.1 : January 9, 2013  
+
+* Updates the copyright year
+
 0.2.0 : January 9, 2013  
 
 * Changing deploy/undeploy commands to deployjs/undeployjs
