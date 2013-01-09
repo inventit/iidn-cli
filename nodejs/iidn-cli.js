@@ -91,13 +91,17 @@
 		var http = (urlObj.protocol == 'https:') ? require('https') : require('http');
 		var options = {
 			hostname: urlObj.hostname,
-			port: urlObj.port,
 			path: urlObj.path,
 			method: o.method
 		};
+		if (urlObj.port) {
+			options['port'] = urlObj.port;
+		}
+		options.headers = {};
 		if (o.type) {
-			options.headers = {
-				'Content-Type' : o.type
+			options.headers['Content-Type'] = o.type;
+			if (o.type.indexOf('octet-stream') && o.body) {
+				options.headers['Content-Length'] = o.body.length;
 			}
 		}
 		o.buff = '';
@@ -150,7 +154,7 @@
 				res.on('close', o.onClose);
 				res.on('end', o.onClose);
 			}
-			if (res.statusCode != 200) {
+			if (Math.floor(res.statusCode / 100) != 2) {
 				console.error('[ERROR] Status:'+ res.statusCode);
 				if (o.callback) {
 					o.callback(null, res.statusCode);
