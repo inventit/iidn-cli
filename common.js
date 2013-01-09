@@ -14,10 +14,10 @@ function main(argvInput) {
 		log('iidn <COMMAND> [ARGS]');
 		log('COMMAND:');
 		log(' signup .... Allows you to sign up IIDN. Your OAuth2 account is mandatory.');
-		log(' deployjs .... Allows you to deploy your MOAT js script package archive.');
-		log(' undeployjs .... Allows you to undeploy your MOAT js script package archive.');
-		log(' deploybin .... Allows you to deploy your binary distribution package.');
-		log(' undeploybin .... Allows you to undeploy your binary distribution package.');
+		log(' jsdeploy .... Allows you to deploy your MOAT js script package archive.');
+		log(' jsundeploy .... Allows you to undeploy your MOAT js script package archive.');
+		log(' bindeploy .... Allows you to deploy your binary distribution package.');
+		log(' binundeploy .... Allows you to undeploy your binary distribution package.');
 		log(' log    .... Allows you to tail the server side MOAT js script logs.');
 		log(' tokengen .... Allows you to download the security token for your client application (i.e. Android, OSGi).');
 		log(' remove .... Allows you to remove your IIDN account.');
@@ -195,7 +195,7 @@ withAuth = (function() {
 })();
 
 // Undeploy Bin Command
-function undeploybinCommand() {
+function binundeployCommand() {
 
 	this.perform = function(argv) {
 		withAuth.invoke(MOAT_REST_API_URI + '/sys/package/' + argv[1] + '?r=delete',
@@ -230,7 +230,7 @@ function undeploybinCommand() {
 	}
 	
 	this.help = function() {
-		log('iidn undeploybin <object-file-name>');
+		log('iidn binundeploy <object-file-name>');
 	}
 
 	this.validate = function(argv) {
@@ -243,48 +243,53 @@ function undeploybinCommand() {
 }
 
 // Deploy Bin Command
-function deploybinCommand() {
+function bindeployCommand() {
 
 	this.perform = function(argv) {
 		var objectName = argv[1];
 		if (objectName.indexOf('/') >= 0) {
 			objectName = objectName.substring(objectName.lastIndexOf('/') + 1);
 		}
-		log('Registering [' + objectName + ']...');
-		withAuth.invoke(MOAT_REST_API_URI + '/sys/package/' + objectName + '?r=put',
-			function(url) {
-				log('Deploying a binary distribution package...');
-				httpGet(url,
-					function(body, statusCode) {
-						if (statusCode == 200) {
-							var uploadedError = false;
-							httpPut(body['put'], 'application/octet-stream', readRawContent(argv[1]),
-								function(body, statusCode) {
-									uploadedError = true;
-									if (body != null) {
-										log('Error. Message:' + body + ', Code:' + statusCode);
-									}
-									withAuth.signOut(71);
-								},
-								function() {
-									if (!uploadedError) {
-										log('A new binary distribution package has been created.');
-									}
-									withAuth.signOut(70);
-								});
+		if (/^[a-zA-Z0-9\.-_%]*$/.test(objectName) == false) {
+			log('Invalid Name => ' + objectName + '. Alphanumeric, period(.), hyphen(-) and underscore(_) are allowed.');
+			withAuth.signOut(73);
+		} else {
+			log('Registering [' + objectName + ']...');
+			withAuth.invoke(MOAT_REST_API_URI + '/sys/package/' + objectName + '?r=put',
+				function(url) {
+					log('Deploying a binary distribution package...');
+					httpGet(url,
+						function(body, statusCode) {
+							if (statusCode == 200) {
+								var uploadedError = false;
+								httpPut(body['put'], 'application/octet-stream', readRawContent(argv[1]),
+									function(body, statusCode) {
+										uploadedError = true;
+										if (body != null) {
+											log('Error. Message:' + body + ', Code:' + statusCode);
+										}
+										withAuth.signOut(71);
+									},
+									function() {
+										if (!uploadedError) {
+											log('A new binary distribution package has been created.');
+										}
+										withAuth.signOut(70);
+									});
 
-						} else {
-							log('Done');
-							withAuth.signOut(72);
+							} else {
+								log('Done');
+								withAuth.signOut(72);
+							}
 						}
-					}
-				);
-			}
-		);
+					);
+				}
+			);
+		}
 	}
 		
 	this.help = function() {
-		log('iidn deploybin <path/to/binary/package/file>');
+		log('iidn bindeploy <path/to/binary/package/file>');
 	}
 
 	this.validate = function(argv) {
@@ -360,7 +365,7 @@ function tokengenCommand() {
 }
 
 // Undeploy js Command
-function undeployjsCommand() {
+function jsundeployCommand() {
 
 	this.perform = function(argv) {
 		withAuth.invoke(MOAT_REST_API_URI + '/sys/package/' + argv[1] + '?m=delete',
@@ -381,7 +386,7 @@ function undeployjsCommand() {
 	}
 	
 	this.help = function() {
-		log('iidn undeployjs <pacakge-id>');
+		log('iidn jsundeploy <pacakge-id>');
 	}
 
 	this.validate = function(argv) {
@@ -394,7 +399,7 @@ function undeployjsCommand() {
 }
 
 // Deploy js Command
-function deployjsCommand() {
+function jsdeployCommand() {
 
 	this.perform = function(argv) {
 		withAuth.invoke(MOAT_REST_API_URI + '/sys/package',
@@ -445,7 +450,7 @@ function deployjsCommand() {
 	}
 	
 	this.help = function() {
-		log('iidn deployjs <path/to/package/zip/file>');
+		log('iidn jsdeploy <path/to/package/zip/file>');
 		log('The file must be zip-archived and contain the package.json.');
 	}
 
