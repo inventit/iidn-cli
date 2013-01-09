@@ -39,7 +39,7 @@ All program source codes are available under the MIT style License.
 
 The use of IIDN service requires [our term of service](http://dev.yourinventit.com/legal/term-of-service).
 
-Copyright (c) 2012 Inventit Inc.
+Copyright (c) 2013 Inventit Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -49,5 +49,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Change History
 
-0.1.0 : December 10, 2012  
+0.2.0 : January 9, 2013  
+
+* Changing deploy/undeploy commands to deployjs/undeployjs
+* Adds new commands, deploybin/undeploybin for deploying/undeploying arbitrary distribution application packages for devices/gateways
+* Adds a new command 'sysdownload' allowing users to download packages managed by the sandbox server
+
+0.1.0 : December 10, 2012
+
 * Initial Release.
