@@ -107,52 +107,74 @@
 		o.buff = '';
 		var req = http.request(options, function(res) {
 			var contentType = res.headers['content-type'];
-			if (contentType && contentType.indexOf('octet-stream') < 0) {
+			var content = "";
+			var len = 0;
+			// binaries are stored application/octet-stream for now.
+			var isBinary = (contentType && contentType.indexOf('octet-stream') >= 0);
+			if (isBinary) {
+				content = [];
+				res.on('data', function(chunk) {
+					content.push(chunk);
+					len += chunk.length;
+				});
+				res.on('end', function() {
+					var buf = new Buffer(len); 
+					var pos = 0;
+				    for (var i = 0; i < content.length; i++) { 
+				      content[i].copy(buf, pos); 
+				      pos += content[i].length; 
+				    } 
+				    o.callback(buf, res.statusCode);
+					if (o.onClose) {
+						o.onClose();
+					}
+				});
+			} else {
 				res.setEncoding('UTF-8');
-			} 
-			res.on('data', function(chunk) {
-				var skipCallback = false;
-				var content = chunk;
-				if (o.chunked) {
-					o.buff += content;
-					content = '';
-					var crlf;
-					while ((crlf = o.buff.indexOf('\r\n')) >= 0) {
-						skipCallback = false;
-						if (!o.chunkSize && crlf >= 0) {
-							o.chunkSize = parseInt(o.buff.substring(0, crlf), 16);
-							o.buff = o.buff.substring(crlf + 2); // truncate size
-							if (o.buff.length == 0) {
-								// no more chars
+				res.on('data', function(chunk) {
+					var skipCallback = false;
+					content = chunk;
+					if (o.chunked) {
+						o.buff += content;
+						content = '';
+						var crlf;
+						while ((crlf = o.buff.indexOf('\r\n')) >= 0) {
+							skipCallback = false;
+							if (!o.chunkSize && crlf >= 0) {
+								o.chunkSize = parseInt(o.buff.substring(0, crlf), 16);
+								o.buff = o.buff.substring(crlf + 2); // truncate size
+								if (o.buff.length == 0) {
+									// no more chars
+									skipCallback = true;
+								}
+							}
+							if (o.chunkSize && o.chunkSize <= o.buff.length) {
+								content += o.buff.substring(0, o.chunkSize);
+								if (o.chunkSize < o.buff.length) {
+									// trim
+									o.buff = o.buff.substring(o.chunkSize).replace(/\s+$/,'');
+								} else {
+									o.buff = '';
+								}
+								o.chunkSize = null;
+							} else {
+								// All data doesn't arrive yet.
 								skipCallback = true;
 							}
 						}
-						if (o.chunkSize && o.chunkSize <= o.buff.length) {
-							content += o.buff.substring(0, o.chunkSize);
-							if (o.chunkSize < o.buff.length) {
-								// trim
-								o.buff = o.buff.substring(o.chunkSize).replace(/\s+$/,'');
-							} else {
-								o.buff = '';
-							}
-							o.chunkSize = null;
+					}
+					if (!skipCallback && o.callback) {
+						if (contentType && contentType.indexOf('json') >= 0) {
+							o.callback(JSON.parse(content), res.statusCode);
 						} else {
-							// All data doesn't arrive yet.
-							skipCallback = true;
+							o.callback(content, res.statusCode);
 						}
 					}
+				});
+				if (o.onClose) {
+					res.on('close', o.onClose);
+					res.on('end', o.onClose);
 				}
-				if (!skipCallback && o.callback) {
-					if (contentType && contentType.indexOf('json') >= 0) {
-						o.callback(JSON.parse(content), res.statusCode);
-					} else {
-						o.callback(content, res.statusCode);
-					}
-				}
-			});
-			if (o.onClose) {
-				res.on('close', o.onClose);
-				res.on('end', o.onClose);
 			}
 			if (Math.floor(res.statusCode / 100) != 2) {
 				console.error('[ERROR] Status:'+ res.statusCode);
