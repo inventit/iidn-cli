@@ -5,11 +5,13 @@ iidn-cli is a command line tool offering you to interact with IIDN sandbox.
 ## What iidn-cli offers
 The tool enables you:
 
-* to sign up to IIDN sandbox with your OAuth2 account such as [Facebook](http://www.facebook.com/) and [GitHub](https://github.com).
-* to upload your [MOAT js](http://dev.yourinventit.com/guides/moat-iot/moat-js) server side applications to the sandbox.
-* to tail a [MOAT js](http://dev.yourinventit.com/guides/moat-iot/moat-js) server side application log.
-* to download a secure token for you to sign it with your application certificate private key and embed it to your application.
+* to sign up to IIDN sandbox with your OAuth2 account such as [Facebook](http://www.facebook.com/) and [GitHub](https://github.com)
+* to upload your [MOAT js](http://dev.yourinventit.com/references/moat-js-api-document) server side applications to the sandbox
+* to upload your [MOAT Java](http://dev.yourinventit.com/references/moat-java-api-document) and/or MOAT C applications to the sandbox
+* to tail a [MOAT js](http://dev.yourinventit.com/references/moat-js-api-document) server side application log
+* to download a secure token for you to sign it with your application certificate private key and embed it to your application
   (The gateway application uses the signed secure token for verification as well.)
+* to download system managed binaries
 
 ## Prerequisites
 The tool requires one of the following runtimes:
@@ -48,6 +50,10 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ## Change History
+
+0.2.3 : January 13, 2013  
+
+* Fixes an issue where Rhino script fails to set the content type
 
 0.2.2 : January 9, 2013  
 
