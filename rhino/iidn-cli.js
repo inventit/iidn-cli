@@ -154,8 +154,8 @@
 				}
 				var out = new java.io.ByteArrayOutputStream();
 				var w;
-				if (type && ((type.indexOf('json') >= 0) || type.indexOf('text') >=0 ||
-						(type == 'application/x-www-form-urlencoded'))) {
+				if (o.type && ((o.type.indexOf('json') >= 0) || o.type.indexOf('text') >=0 ||
+						(o.type == 'application/x-www-form-urlencoded'))) {
 					w = new java.io.BufferedWriter(new java.io.OutputStreamWriter(out, 'utf-8'));
 				} else {
 					// an instant wrapper.
