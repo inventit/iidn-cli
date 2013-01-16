@@ -224,21 +224,25 @@ function sysdownloadCommand() {
 
 	function askEula(callback) {
 		log('Please read and accept the EULA:');
+		var message = '';
 		httpGet(IIDN_EULA_URI, function(content, status) {
-			if (status != 200) {
+			if (status == 200) {
+				message += content;
+			} else {
 				log('Error! EULA is not available. Try later.');
 				exit(15);
-			} else {
-				print(content);
-				log('Did you read and accept the agreement? (yes/no):');
-				prompt(function(text) {
-					if (text.toLowerCase() != 'yes') {
-						callback.rejected();
-					} else {
-						callback.accepted();
-					}
-				});
 			}
+		},
+		function() {
+			print(message);
+			log('Did you read and accept the agreement? (yes/no):');
+			prompt(function(text) {
+				if (text.toLowerCase() != 'yes') {
+					callback.rejected();
+				} else {
+					callback.accepted();
+				}
+			});
 		});
 	}
 	
