@@ -51,6 +51,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Change History
 
+0.2.4 : January 16, 2013  
+
+* Fixes an issue where a large ToS text isn't displayed properly
+
 0.2.3 : January 13, 2013  
 
 * Fixes an issue where Rhino script fails to set the content type
