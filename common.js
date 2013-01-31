@@ -15,6 +15,7 @@ function main(argvInput) {
 		log('iidn <COMMAND> [ARGS]');
 		log('COMMAND:');
 		log(' signup      .... Allows you to sign up IIDN. Your OAuth2 account is mandatory.');
+		log(' reset       .... Allows you to reset your client_secret. Your OAuth2 account is mandatory.');
 		log(' jsdeploy    .... Allows you to deploy your MOAT js script package archive.');
 		log(' jsundeploy  .... Allows you to undeploy your MOAT js script package archive.');
 		log(' bindeploy   .... Allows you to deploy your binary distribution package.');
@@ -196,6 +197,124 @@ withAuth = (function() {
 	}
 	return this;
 })();
+
+// Reset Command
+function resetCommand() {
+	var oauth2Provider;
+	
+	this.perform = function(argv) {
+		ruSure({
+			rejected: function() {
+				exit(10);
+			},
+			accepted: function() {
+				reset(oauth2Provider);
+			}
+		});
+	}
+	this.help = function() {
+		log('iidn reset <OAuth2 Provider>');
+		log('OAuth2 Provider:');
+		log(' fb     ... Using Facebook Account');
+		log(' github ... Using GitHub Account');
+	}
+	this.validate = function(argv) {
+		if (argv.length == 1) {
+			return false;
+		}
+		oauth2Provider = argv[1].toLowerCase();
+		switch (oauth2Provider) {
+			case 'fb':
+			case 'github':
+			break;
+			default:
+			oauth2Provider = null;
+			return false;
+		}
+		return true;
+	}
+
+	function ruSure(callback) {
+		log('Heads Up!!');
+		log('THIS ACTION INVALIDATES YOUR API SECRET (client_secret).');
+		log('(Your client_secret is no longer valid after the action completed.)')
+		log('Are you sure to reset your client_secret? (yes/no):');
+		prompt(function(text) {
+			if (text.toLowerCase() != 'yes') {
+				callback.rejected();
+			} else {
+				callback.accepted();
+			}
+		});
+	}
+	
+	function reset(oauth2Provider) {
+		var resetResult;
+		httpGet(MOAT_REST_API_URI + '/sys/oauth2auth?p=' + oauth2Provider + '&t=authorization', onAuthorizationResponse);
+		function onAuthorizationResponse(body) {
+			if (!body) {
+				log('Server is unreachable or not avaialble for now. Try later.');
+				exit(12);
+			}
+			var url = body.authorizationUri;
+			log('Opening Browser or you can enter the following URL manually:');
+			log(url);
+			openUrl(url);
+
+			log('Enter the authorization code:');
+
+			(function() {
+				var resetStartedAt = new Date().getTime();
+				var id = setInterval(function() {
+					var now = new Date().getTime();
+					if (resetResult) {
+						clearInterval(id);
+						welcomeBack(resetResult);
+					} else if (now - resetStartedAt >= SIGNUP_TIMEOUT_MS) {
+						clearInterval(id);
+						log('Sorry. Cannot confirm whther or not the authorization was completed. Try again.');
+						exit(11);
+					}
+				}, 5000);
+			})();
+
+			prompt(function(text) {
+				if (text != '') {
+					var get = MOAT_REST_API_URI + '/sys/oauth2auth?p='
+						+ oauth2Provider + '&t=verification&c=' + escape(text)
+						+ '&g=resetApiCredentials';
+					httpGet(get,
+						function(body, statusCode) {
+							if (!body) {
+								if (statusCode == 400) {
+									log('Invalid authorization code.');
+									exit(13);
+								} else {
+									log('Server is unreachable or not avaialble for now. Try later.');
+									exit(14);
+								}
+								exit(14);
+							}
+							resetResult = body;
+						}
+					);
+				}
+			});
+		}
+		
+		function welcomeBack(info) {
+			log(info.email + ', welcome back!');
+			log('=====================');
+			log('Registration Info:');
+			log('  app_id :' + info.appId);
+			log('  client_id :' + info.clientId);
+			log('  client_secret :' + info.clientSecret);
+			log('=====================');
+			exit(0);
+		}
+	}
+	
+}
 
 // Sys Download Command
 function sysdownloadCommand() {
@@ -718,7 +837,7 @@ function signupCommand() {
 						function(body, statusCode) {
 							if (!body) {
 								if (statusCode == 400) {
-									log('You already signed up with your email address. Remove the account to register again.');
+									log('Invalid authorization code or you already signed up with your email address. Reset your API credentials or remove the account to register again.');
 									exit(13);
 								} else {
 									log('Server is unreachable or not avaialble for now. Try later.');
