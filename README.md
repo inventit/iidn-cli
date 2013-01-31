@@ -6,6 +6,8 @@ iidn-cli is a command line tool offering you to interact with IIDN sandbox.
 The tool enables you:
 
 * to sign up to IIDN sandbox with your OAuth2 account such as [Facebook](http://www.facebook.com/) and [GitHub](https://github.com)
+ * Use <code>reset</code> command when you forget your API credentials (<code>app_id</code>, <code>client_id</code> and <code>client_secret</code>)
+* to reset your API secret (<code>client_secret</code>) with your OAuth2 account
 * to upload your [MOAT js](http://dev.yourinventit.com/references/moat-js-api-document) server side applications to the sandbox
 * to upload your [MOAT Java](http://dev.yourinventit.com/references/moat-java-api-document) and/or MOAT C applications to the sandbox
 * to tail a [MOAT js](http://dev.yourinventit.com/references/moat-js-api-document) server side application log
@@ -50,6 +52,11 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ## Change History
+
+1.0.1 : January 31, 2013  
+
+* Adds a new command to reset an API secret
+* Changes the version number to synchronize with MOAT REST API version
 
 0.2.5 : January 16, 2013  
 
