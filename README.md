@@ -53,9 +53,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Change History
 
-0.2.6 : January 31, 2013  
+1.0.1 : January 31, 2013  
 
 * Adds a new command to reset an API secret
+* Changes the version number to synchronize with MOAT REST API version
 
 0.2.5 : January 16, 2013  
 

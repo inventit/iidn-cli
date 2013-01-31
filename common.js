@@ -13,6 +13,7 @@ function main(argvInput) {
 	var ret = 0;
 	if (command == null) {
 		log('iidn <COMMAND> [ARGS]');
+		log('VERSION: 1.0.1');
 		log('COMMAND:');
 		log(' signup      .... Allows you to sign up IIDN. Your OAuth2 account is mandatory.');
 		log(' reset       .... Allows you to reset your client_secret. Your OAuth2 account is mandatory.');
@@ -20,7 +21,6 @@ function main(argvInput) {
 		log(' jsundeploy  .... Allows you to undeploy your MOAT js script package archive.');
 		log(' bindeploy   .... Allows you to deploy your binary distribution package.');
 		log(' binundeploy .... Allows you to undeploy your binary distribution package.');
-		log(' bindeploy   .... Allows you to deploy your binary distribution package.');
 		log(' sysdownload .... Allows you to download proprietary binary objects offered by Inventit. EULA must be accepted.');
 		log(' log         .... Allows you to tail the server side MOAT js script logs.');
 		log(' tokengen    .... Allows you to download the security token for your client application (i.e. Android, OSGi).');
