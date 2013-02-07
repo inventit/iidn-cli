@@ -167,14 +167,16 @@
 						close : function() {}
 					};
 				}
-				writeBody(w, type, body);
+				writeBody(w, o.type, o.body);
 				w.flush();
 				w.close();
 				var bytes = out.toByteArray();
+				// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6472250
 				connection.setFixedLengthStreamingMode(bytes.length);
 				connection.setRequestProperty('Content-Length', bytes.length);
-				connection.getOutputStream().write(bytes, 0, bytes.length);
-				connection.getOutputStream().flush();
+				var os = connection.getOutputStream();
+				os.write(bytes, 0, bytes.length);
+				os.flush();
 				
 			} else {
 				connection.connect();

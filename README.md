@@ -53,6 +53,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Change History
 
+1.0.1-r1 : February 7, 2013  
+
+* Fixes issues where jsdeploy doesn't work on Rhino runtime
+
 1.0.1 : January 31, 2013  
 
 * Adds a new command to reset an API secret
