@@ -63,7 +63,8 @@
 	}
 	
 	function writeRawContent(path, content) {
-		var out = new java.io.FileOutputStream(path);
+		// append = true
+		var out = new java.io.FileOutputStream(path, true);
 		try {
 			out.write(content, 0, content.length);
 			out.flush();

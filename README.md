@@ -53,6 +53,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Change History
 
+1.0.1-r2 : February 8, 2013  
+
+* Fixes issues where sydownload always overwrites a local file with the latest downloaded chunk
+
 1.0.1-r1 : February 7, 2013  
 
 * Fixes issues where jsdeploy doesn't work on Rhino runtime
