@@ -38,7 +38,7 @@
 
 	function writeRawContent(path, content) {
 		var fs = require('fs');
-		fs.writeFileSync(path, content);
+		fs.appendFileSync(path, content);
 	}
 
 	function prompt(callback) {
