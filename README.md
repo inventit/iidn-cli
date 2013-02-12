@@ -53,8 +53,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Change History
 
-1.0.1-r3 : February ?, 2013  
+1.0.1-r3 : February 13, 2013  
 
+* `iidn` command without arguments may not work on some environment
+* Fixes an issue where a browser opening function aborts the process when the terminal doesn't working on any display system
 * Changes the shell type declaration in `iidn`, explicitly referring to `bash`
 
 1.0.1-r2 : February 8, 2013  
