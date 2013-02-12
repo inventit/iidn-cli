@@ -13,7 +13,7 @@ function main(argvInput) {
 	var ret = 0;
 	if (command == null) {
 		log('iidn <COMMAND> [ARGS]');
-		log('VERSION: 1.0.1');
+		log('VERSION: 1.0.1-r3');
 		log('COMMAND:');
 		log(' signup      .... Allows you to sign up IIDN. Your OAuth2 account is mandatory.');
 		log(' reset       .... Allows you to reset your client_secret. Your OAuth2 account is mandatory.');
@@ -39,8 +39,7 @@ function main(argvInput) {
 function strip(argv) {
 	if (argv.length == 0) {
 		return argv;
-	}
-	if (argv[1].match(/iidn-cli.js$/)) {
+	} else if (argv.length > 1 && argv[1].match(/iidn-cli.js$/)) {
 		argv.shift();
 	}
 	argv.shift();
