@@ -86,7 +86,11 @@
 	}
 
 	function openUrl(url) {
-		java.awt.Desktop.getDesktop().browse(new java.net.URI(url));
+		try {
+			java.awt.Desktop.getDesktop().browse(new java.net.URI(url));
+		} catch (e) {
+			log('Failed to open the URL. Use another machine to browse the URL.');
+		}
 	}
 	
 	// JDK-built-in Rhino doesn't have setInterval().

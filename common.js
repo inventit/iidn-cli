@@ -39,8 +39,7 @@ function main(argvInput) {
 function strip(argv) {
 	if (argv.length == 0) {
 		return argv;
-	}
-	if (argv[1].match(/iidn-cli.js$/)) {
+	} else if (argv.length > 1 && argv[1].match(/iidn-cli.js$/)) {
 		argv.shift();
 	}
 	argv.shift();
