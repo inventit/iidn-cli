@@ -6,10 +6,12 @@ var IIDN_TERM_OF_SERVICE_URI = 'http://dev.yourinventit.com/files/TERMS.txt';
 var IIDN_EULA_URI = 'http://dev.yourinventit.com/files/2013JAN-IBCLA.txt';
 var MOAT_REST_API_URI = 'https://sandbox.service-sync.com/moat/v1';
 var SIGNUP_TIMEOUT_MS = 5 * 60 * 1000;
+var cred = [];
 
 function main(argvInput) {
 	var argv = strip(argvInput);
 	var command = resolveCommand(argv);
+	cred = resolveCred(argv);
 	var ret = 0;
 	if (command == null) {
 		log('iidn <COMMAND> [ARGS]');
@@ -58,6 +60,31 @@ function resolveCommand(argv) {
 		log('unknown command:' + argv[0]);
 		return null;
 	}
+}
+
+function resolveCred(argv) {
+	if (argv.length == 0) {
+		log('no argument.')
+		return null;
+	}
+	var localCred = [];
+	var credLabels = ['--app_id=', '--client_id=', '--client_secret='];
+	for (var i = 0; argv[i] ; i++) {
+		for (var j = 0; j < 3; j++) {
+			if (argv[i].indexOf(credLabels[j]) == 0) {
+				localCred[j] = argv[i].substring(argv[i].indexOf('=') + 1);
+				argv.splice(i, 1);
+				i--;
+			}
+		}
+	}
+	for (var i = 0; i < 3; i++) {
+		if (!localCred[i] || localCred[i] == '') {
+			localCred = null;
+			break;
+		}
+	}
+	return localCred;
 }
 
 function httpGet(uri, callback, onCloseOrEnd, chunked) {
@@ -131,8 +158,17 @@ withAuth = (function() {
 	this.invoke = function(input, callback) {
 		if (authToken) {
 			callback(toAuthUrl(input));
+		} else if (cred && cred.length == 3){
+			signIn(cred, function(body, statusCode) {
+				if (body) {
+					authToken = body.accessToken;
+					callback(toAuthUrl(input), cred);
+				} else {
+					exit(23);
+				}
+			});
 		} else {
-			var cred = [];
+			cred = [];
 			log('Enter your appId:');
 			prompt(function(appId) {
 				if (!appId) {
