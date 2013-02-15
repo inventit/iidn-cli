@@ -60,10 +60,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Change History
 
-1.0.1-r4 : February ??, 2013  
+1.0.1-r4 : February 15, 2013  
 
 * `iidn` command now takes credentials as arguments
-* Changes the searching order for javascript runtime because of vanilla Ubuntu precise to work
 
 1.0.1-r3 : February 13, 2013  
 
