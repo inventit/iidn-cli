@@ -15,10 +15,17 @@ The tool enables you:
   (The gateway application uses the signed secure token for verification as well.)
 * to download system managed binaries
 
+## Authentication Arguments
+
+As of 1.0.1-r4, iidn-cli accepts credentials as command line arguments.
+
+    sh ./iidn <command> <command_params> --app_id=YOUR_APP_ID \
+        --client_id=YOUR_CLIENT_ID --client_secret=YOUR_CLIENT_SECRET
+
 ## Prerequisites
 The tool requires one of the following runtimes:
 
-* Node.js, v0.8.8+
+* Node.js, v0.8.8+, or
 * Sun/Oracle/Apple JDK, 1.6+ (Not a JRE. OpenJDK may work though not confirmed.)
 
 ## Installation
@@ -52,6 +59,10 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ## Change History
+
+1.0.1-r4 : February 15, 2013  
+
+* `iidn` command now takes credentials as arguments
 
 1.0.1-r3 : February 13, 2013  
 
