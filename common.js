@@ -678,16 +678,28 @@ function jsdeployCommand() {
 	}
 	
 	function desc(body) {
-		log('Deployed MOAT js package info:');
-		log(' package-id(name):' + body.packageJson.name);
-		log(' version:' + body.packageJson.version);
-		if (body.udatedFiles) {
-			log(' updated files:' + body.udatedFiles);
-		}
-		if (body.registeredFiles) {
-			log(' uploaded files:' + body.registeredFiles);
-		}
-		log('=> OK');
+      if (body.packageJson) {
+		      log('Deployed MOAT js package info:');
+		      log(' package-id(name):' + body.packageJson.name);
+		      log(' version:' + body.packageJson.version);
+		      if (body.udatedFiles) {
+			        log(' updated files:' + body.udatedFiles);
+		      }
+		      if (body.registeredFiles) {
+			        log(' uploaded files:' + body.registeredFiles);
+		      }
+		      log('=> OK');
+      } else {
+		      log('MOAT js deployment failed');
+          if (body.errors) {
+	            for (var i = 0; i < body.errors.length; i++) {
+                  log(' ' + body.errors[i]);
+	            }
+          } else {
+              log(' unknonw error.');
+          }
+          log('=> NG');
+      }
 	}
 	
 	this.help = function() {
