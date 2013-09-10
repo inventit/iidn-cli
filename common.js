@@ -696,7 +696,7 @@ function jsdeployCommand() {
                   log(' ' + body.errors[i]);
 	            }
           } else {
-              log(' unknonw error.');
+              log(' unknown error.');
           }
           log('=> NG');
       }
