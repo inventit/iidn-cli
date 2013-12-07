@@ -2,8 +2,8 @@
  * Copyright 2013 Inventit Inc.
  */
 
-var IIDN_TERM_OF_SERVICE_URI = 'http://dev.yourinventit.com/files/TERMS.txt';
-var IIDN_EULA_URI = 'http://dev.yourinventit.com/files/2013JAN-IBCLA.txt';
+var IIDN_TERM_OF_SERVICE_URI = 'http://dev.inventit.io/files/TERMS.txt';
+var IIDN_EULA_URI = 'http://dev.inventit.io/files/2013JAN-IBCLA.txt';
 var MOAT_REST_API_URI = 'https://sandbox.service-sync.com/moat/v1';
 var SIGNUP_TIMEOUT_MS = 5 * 60 * 1000;
 var cred = [];
