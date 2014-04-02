@@ -60,6 +60,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Change History
 
+1.0.1-r5 : April 2, 2014
+
+* HTTP web proxy support
+
 1.0.1-r4 : February 15, 2013  
 
 * `iidn` command now takes credentials as arguments
