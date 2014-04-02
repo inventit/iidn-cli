@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 Inventit Inc.
+ * Copyright 2014 Inventit Inc.
  */
 
 (function() {
