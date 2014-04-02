@@ -1,12 +1,14 @@
 #!/bin/bash
 
 #
-# Copyright 2013 Inventit Inc. 
+# Copyright 2014 Inventit Inc. 
 #
 
 resolveRuntime() {
 	# Check node
-	if command -v node > /dev/null; then
+	if [ ! -z "$HTTP_PROXY" ] || [ ! -z "$http_proxy" ] ; then
+		echo '[IIDN] Global HTTP web proxy is required. Try to use Java.'
+	elif command -v node > /dev/null; then
 		echo '[IIDN] ** Using node... **'
 		script=nodejs
 		return
