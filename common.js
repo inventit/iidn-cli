@@ -344,6 +344,9 @@ function resetCommand() {
 			log('  app_id :' + info.appId);
 			log('  client_id :' + info.clientId);
 			log('  client_secret :' + info.clientSecret);
+			log('  domain :' + info.domainName);
+			log('  enrollment_user_id :' + info.enrollmentUserId);
+			log('  enrollment_password :' + info.enrollmentPassword);
 			log('=====================');
 			exit(0);
 		}
@@ -905,7 +908,10 @@ function signupCommand() {
 			log('  app_id :' + info.appId);
 			log('  client_id :' + info.clientId);
 			log('  client_secret :' + info.clientSecret);
-			log('<NOTICE!> The information is used in order for your application to access IIDN Cloud Sandbox.');
+			log('  domain :' + info.domainName);
+			log('  enrollment_user_id :' + info.enrollmentUserId);
+			log('  enrollment_password :' + info.enrollmentPassword);
+			log('<NOTICE!> The information is used in order for your applications and your devices to access IIDN Cloud Sandbox.');
 			log('=====================');
 			exit(0);
 		}
