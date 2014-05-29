@@ -60,7 +60,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Change History
 
-1.0.2 : May ??, 2014
+1.0.2 : May 29 2014
 
 * Improves console output after signing up/password reset
 
