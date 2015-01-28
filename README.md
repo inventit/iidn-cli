@@ -8,9 +8,9 @@ The tool enables you:
 * to sign up to IIDN sandbox with your OAuth2 account such as [Facebook](http://www.facebook.com/) and [GitHub](https://github.com)
  * Use <code>reset</code> command when you forget your API credentials (<code>app_id</code>, <code>client_id</code> and <code>client_secret</code>)
 * to reset your API secret (<code>client_secret</code>) with your OAuth2 account
-* to upload your [MOAT js](http://dev.yourinventit.com/references/moat-js-api-document) server side applications to the sandbox
-* to upload your [MOAT Java](http://dev.yourinventit.com/references/moat-java-api-document) and/or MOAT C applications to the sandbox
-* to tail a [MOAT js](http://dev.yourinventit.com/references/moat-js-api-document) server side application log
+* to upload your [MOAT js](http://dev.inventit.io/references/moat-js-api-document.html) server side applications to the sandbox
+* to upload your [MOAT Java](http://dev.inventit.io/references/moat-java-api-document.html) and/or MOAT C applications to the sandbox
+* to tail a [MOAT js](http://dev.inventit.io/references/moat-js-api-document.html) server side application log
 * to download a secure token for you to sign it with your application certificate private key and embed it to your application
   (The gateway application uses the signed secure token for verification as well.)
 * to download system managed binaries
@@ -42,13 +42,13 @@ Then run the following command:
 
 ## Get Started
 
-See [the tutorial](http://dev.yourinventit.com/guides/get-started) to learn more.
+See [the tutorial](http://dev.inventit.io/guides/get-started.html) to learn more.
 
 ## Source Code License
 
 All program source codes are available under the MIT style License.
 
-The use of IIDN service requires [our term of service](http://dev.yourinventit.com/legal/term-of-service).
+The use of IIDN service requires [our term of service](http://dev.inventit.io/legal/term-of-service.html).
 
 Copyright (c) 2014 Inventit Inc.
 
